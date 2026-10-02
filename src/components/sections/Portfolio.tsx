@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -30,6 +30,11 @@ const categoryLabels: Record<string, string> = {
 export default function Portfolio({ data }: PortfolioProps) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [lightboxImage, setLightboxImage] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Dynamically get available categories from the data
   const availableCategories = Array.from(
@@ -49,12 +54,16 @@ export default function Portfolio({ data }: PortfolioProps) {
   }
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 50, opacity: 0, rotateX: -15, scale: 0.9 },
     visible: {
       y: 0,
       opacity: 1,
+      rotateX: 0,
+      scale: 1,
       transition: {
-        duration: 0.4,
+        duration: 0.6,
+        type: "spring" as const,
+        stiffness: 80,
       },
     },
   }
@@ -85,11 +94,59 @@ export default function Portfolio({ data }: PortfolioProps) {
   }
 
   return (
-    <section id="portfolio" className="py-32 bg-gradient-to-b from-slate-100 via-blue-50 to-slate-100 relative overflow-hidden">
-      {/* Background Decoration */}
+    <section id="portfolio" className="py-32 bg-gradient-to-b from-slate-100 via-blue-50 to-slate-100 relative overflow-hidden perspective-1000">
+      {/* 3D Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-200/20 via-slate-200/10 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-slate-200/20 via-blue-200/10 to-transparent rounded-full blur-3xl" />
+        <motion.div
+          className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-400/20 via-purple-400/15 to-slate-400/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            rotate: [0, 90, 0],
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-gradient-to-tl from-purple-400/20 via-blue-400/15 to-slate-400/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, -90, 0],
+            x: [0, -100, 0],
+            y: [0, 50, 0],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        {/* Floating particles */}
+        {mounted && Array.from({ length: 15 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-blue-400/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -100, 0],
+              x: [0, (Math.random() - 0.5) * 50, 0],
+              opacity: [0, 0.6, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
       </div>
       
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
@@ -171,7 +228,7 @@ export default function Portfolio({ data }: PortfolioProps) {
           {/* Projects Grid */}
           <motion.div
             key={selectedCategory}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -179,37 +236,72 @@ export default function Portfolio({ data }: PortfolioProps) {
             {filteredProjects.map((project, index) => (
               <motion.div
                 key={project._id}
-                className="bg-gradient-to-br from-white/90 to-slate-50/60 rounded-2xl border border-slate-100/60 shadow-lg shadow-slate-200/60 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:-translate-y-2 overflow-hidden group"
+                className="bg-gradient-to-br from-white/90 to-slate-50/60 rounded-2xl border border-slate-100/60 shadow-lg shadow-slate-200/60 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 overflow-hidden group card-3d-hover"
                 variants={itemVariants}
-                whileHover={{ y: -8, scale: 1.01 }}
+                style={{ transformStyle: "preserve-3d" }}
+                animate={{
+                  y: [0, -15, 0],
+                  rotateY: [0, 4, 0],
+                  rotateX: [0, -2, 0],
+                }}
+                transition={{
+                  duration: 5 + (index % 4) * 0.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: index * 0.15
+                }}
+                whileHover={{
+                  y: -18,
+                  rotateX: 10,
+                  rotateY: -10,
+                  scale: 1.03,
+                  boxShadow: "0 35px 70px -12px rgba(0, 0, 0, 0.35)"
+                }}
               >
                 {/* Project Image */}
-                <div className="relative rounded-xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 cursor-pointer shadow-md hover:shadow-lg transition-shadow duration-300"
-                     onClick={() => project.images[0]?.asset && setLightboxImage(getImageUrl(project.images[0].asset._ref))}>
+                <motion.div
+                  className="relative rounded-xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 cursor-pointer shadow-md hover:shadow-lg transition-shadow duration-300"
+                  style={{ transform: "translateZ(20px)" }}
+                  onClick={() => project.images[0]?.asset && setLightboxImage(getImageUrl(project.images[0].asset._ref))}
+                  whileHover={{ scale: 1.05 }}
+                >
                   {project.images[0]?.asset ? (
-                    <Image
-                      src={getImageUrl(project.images[0].asset._ref)}
-                      alt={project.title}
-                      width={600}
-                      height={400}
-                      className="w-full h-auto group-hover:scale-105 transition-transform duration-500"
-                      quality={95}
-                      priority={index < 6}
-                    />
+                    <motion.div
+                      style={{ transform: "translateZ(10px)" }}
+                    >
+                      <Image
+                        src={getImageUrl(project.images[0].asset._ref)}
+                        alt={project.title}
+                        width={600}
+                        height={400}
+                        className="w-full h-auto"
+                        quality={95}
+                        priority={index < 6}
+                      />
+                    </motion.div>
                   ) : (
                     <div className="w-full h-64 flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
                       <span className="text-gray-400 font-medium">Project Image</span>
                     </div>
                   )}
 
-                  {/* Zoom Icon Overlay */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                    <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                  {/* 3D Zoom Icon Overlay */}
+                  <motion.div
+                    className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100"
+                    style={{ transform: "translateZ(30px)" }}
+                  >
+                    <motion.div
+                      className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg"
+                      initial={{ scale: 0, rotate: -180 }}
+                      whileInView={{ scale: 1, rotate: 0 }}
+                      whileHover={{ scale: 1.2, rotate: 90 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
                       </svg>
-                    </div>
-                  </div>
+                    </motion.div>
+                  </motion.div>
 
                   {/* Quick Actions */}
                   <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
@@ -249,14 +341,20 @@ export default function Portfolio({ data }: PortfolioProps) {
                       </span>
                     )}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Project Info */}
-                <div className="p-5 space-y-3 bg-white">
+                <motion.div
+                  className="p-5 space-y-3 bg-white"
+                  style={{ transform: "translateZ(15px)" }}
+                >
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-slate-900">
+                  <motion.h3
+                    className="text-xl font-bold text-slate-900"
+                    whileHover={{ x: 5, color: "#2563eb" }}
+                  >
                     {project.title}
-                  </h3>
+                  </motion.h3>
 
                   {/* Description */}
                   <p className="text-slate-800/70 line-clamp-2 text-sm leading-relaxed">
@@ -266,31 +364,43 @@ export default function Portfolio({ data }: PortfolioProps) {
                   {/* Technologies */}
                   <div className="flex flex-wrap gap-1.5">
                     {project.technologies.slice(0, 3).map((tech, techIndex) => (
-                      <span
+                      <motion.span
                         key={techIndex}
                         className="px-3 py-1 bg-gradient-to-r from-blue-500/10 to-blue-600/10 text-blue-700 rounded-full text-xs font-medium border border-blue-200/50"
+                        whileHover={{ scale: 1.1, y: -2 }}
+                        transition={{ type: "spring" as const, stiffness: 400 }}
                       >
                         {tech}
-                      </span>
+                      </motion.span>
                     ))}
                     {project.technologies.length > 3 && (
-                      <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-medium">
+                      <motion.span
+                        className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-medium"
+                        whileHover={{ scale: 1.1 }}
+                      >
                         +{project.technologies.length - 3}
-                      </span>
+                      </motion.span>
                     )}
                   </div>
 
                   {/* View Details Button */}
                   <Link href={`/projects/${project.slug.current}`} prefetch={true}>
-                    <Button
-                      variant="ghost"
-                      className="w-full hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 font-medium text-sm"
-                    >
-                      View Details
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                    <motion.div whileHover={{ scale: 1.05 }}>
+                      <Button
+                        variant="ghost"
+                        className="w-full hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 font-medium text-sm"
+                      >
+                        View Details
+                        <motion.div
+                          className="ml-2"
+                          whileHover={{ x: 5 }}
+                        >
+                          <ArrowRight className="w-4 h-4" />
+                        </motion.div>
+                      </Button>
+                    </motion.div>
                   </Link>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>

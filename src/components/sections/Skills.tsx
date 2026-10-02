@@ -67,22 +67,29 @@ const getIcon = (iconName?: string): LucideIcon => {
 
 export default function Skills({ data }: SkillsProps) {
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 0, y: 50 },
     visible: {
       opacity: 1,
+      y: 0,
       transition: {
         staggerChildren: 0.1,
+        duration: 0.8,
+        type: "spring" as const,
+        stiffness: 100,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 20, opacity: 0, rotateX: -10 },
     visible: {
       y: 0,
       opacity: 1,
+      rotateX: 0,
       transition: {
         duration: 0.5,
+        type: "spring" as const,
+        stiffness: 100,
       },
     },
   }
@@ -102,11 +109,56 @@ export default function Skills({ data }: SkillsProps) {
   })
 
   return (
-    <section id="skills" className="py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 relative overflow-hidden">
-      {/* Background decoration */}
+    <section id="skills" className="py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-100 relative overflow-hidden perspective-1000 scroll-mt-20">
+      {/* Animated 3D Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl" />
+        <motion.div
+          className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 360],
+            x: [0, 50, 0],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tl from-purple-400/20 to-blue-400/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            rotate: [360, 180, 0],
+            x: [0, -50, 0],
+            y: [0, 30, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        {/* Floating 3D grid */}
+        <motion.div
+          className="absolute inset-0 opacity-5"
+          style={{
+            backgroundImage: `
+              linear-gradient(0deg, transparent 24%, rgba(59, 130, 246, .3) 25%, rgba(59, 130, 246, .3) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, .3) 75%, rgba(59, 130, 246, .3) 76%, transparent 77%, transparent),
+              linear-gradient(90deg, transparent 24%, rgba(59, 130, 246, .3) 25%, rgba(59, 130, 246, .3) 26%, transparent 27%, transparent 74%, rgba(59, 130, 246, .3) 75%, rgba(59, 130, 246, .3) 76%, transparent 77%, transparent)
+            `,
+            backgroundSize: '50px 50px',
+          }}
+          animate={{
+            backgroundPosition: ['0px 0px', '50px 50px', '0px 0px'],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
       </div>
 
       <div className="container mx-auto px-4 max-w-7xl relative z-10">
@@ -175,50 +227,115 @@ export default function Skills({ data }: SkillsProps) {
                   </motion.div>
 
                   {/* Skills Cards */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {skills.map((skill) => {
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 perspective-1000">
+                    {skills.map((skill, index) => {
                       const SkillIcon = getIcon(skill.icon)
                       const proficiency = getProficiencyLabel(skill.proficiency)
-                      
+
                       return (
                         <motion.div
                           key={skill._id}
-                          className="group bg-white p-6 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 border border-slate-100 hover:border-slate-200 relative overflow-hidden"
+                          className="group bg-white p-6 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 hover:border-slate-200 relative overflow-hidden card-3d-hover"
                           variants={itemVariants}
-                          whileHover={{ scale: 1.02, y: -8 }}
+                          style={{ transformStyle: "preserve-3d" }}
+                          animate={{
+                            y: [0, -12, 0],
+                            rotateX: [0, 3, 0],
+                            rotateY: [0, -2, 0],
+                          }}
+                          transition={{
+                            duration: 4 + (index % 3) * 0.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: index * 0.1
+                          }}
+                          whileHover={{
+                            scale: 1.05,
+                            rotateX: 8,
+                            rotateY: -8,
+                            z: 50,
+                            boxShadow: "0 30px 60px -12px rgba(0, 0, 0, 0.3)",
+                            y: -20
+                          }}
                         >
-                          {/* Hover gradient effect */}
-                          <div className={`absolute inset-0 bg-gradient-to-br ${gradient.from} ${gradient.to} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-                          
-                          <div className="relative z-10">
+                          {/* 3D Hover gradient effect */}
+                          <motion.div
+                            className={`absolute inset-0 bg-gradient-to-br ${gradient.from} ${gradient.to} opacity-0`}
+                            animate={{ opacity: 0 }}
+                            whileHover={{ opacity: 0.1 }}
+                            transition={{ duration: 0.3 }}
+                          />
+
+                          {/* Glowing border effect */}
+                          <motion.div
+                            className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                            style={{
+                              background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+                              padding: '2px',
+                              mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                              maskComposite: 'exclude',
+                              WebkitMaskComposite: 'xor',
+                            }}
+                          />
+
+                          <div className="relative z-10" style={{ transformStyle: "preserve-3d" }}>
                             <div className="flex items-start justify-between mb-4">
-                              <div className={`p-3 bg-gradient-to-br ${gradient.from} ${gradient.to} rounded-xl shadow-md shadow-${gradient.accent}/20 group-hover:scale-110 transition-transform duration-300`}>
+                              <motion.div
+                                className={`p-3 bg-gradient-to-br ${gradient.from} ${gradient.to} rounded-xl shadow-md shadow-${gradient.accent}/20`}
+                                whileHover={{
+                                  rotate: 360,
+                                  scale: 1.2
+                                }}
+                                transition={{ duration: 0.6 }}
+                              >
                                 <SkillIcon className="w-5 h-5 text-white" />
-                              </div>
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${proficiency.bg} ${proficiency.color}`}>
+                              </motion.div>
+                              <motion.span
+                                className={`px-3 py-1 rounded-full text-xs font-semibold ${proficiency.bg} ${proficiency.color}`}
+                                whileHover={{ scale: 1.1 }}
+                              >
                                 {proficiency.label}
-                              </span>
+                              </motion.span>
                             </div>
-                            
-                            <h4 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
+
+                            <motion.h4
+                              className="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors"
+                              whileHover={{ x: 5 }}
+                            >
                               {skill.name}
-                            </h4>
-                            
-                            {/* Proficiency Bar */}
+                            </motion.h4>
+
+                            {/* 3D Proficiency Bar */}
                             <div className="space-y-2">
                               <div className="flex justify-between text-xs text-slate-500">
                                 <span>Proficiency</span>
-                                <span className="font-semibold text-slate-700">{skill.proficiency}%</span>
+                                <motion.span
+                                  className="font-semibold text-slate-700"
+                                  whileHover={{ scale: 1.1 }}
+                                >
+                                  {skill.proficiency}%
+                                </motion.span>
                               </div>
-                              <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                              <div className="h-2 bg-slate-100 rounded-full overflow-hidden relative">
                                 <motion.div
                                   initial={{ width: 0 }}
                                   whileInView={{ width: `${skill.proficiency}%` }}
                                   viewport={{ once: true }}
-                                  transition={{ duration: 1, delay: 0.2 }}
+                                  transition={{ duration: 1, delay: 0.2, type: "spring" as const }}
                                   className={`h-full bg-gradient-to-r ${gradient.from} ${gradient.to} rounded-full relative`}
+                                  style={{ transform: "translateZ(10px)" }}
                                 >
-                                  <div className="absolute inset-0 bg-white/30 animate-pulse" />
+                                  <motion.div
+                                    className="absolute inset-0 bg-white/30"
+                                    animate={{
+                                      x: ['-100%', '100%'],
+                                    }}
+                                    transition={{
+                                      duration: 2,
+                                      repeat: Infinity,
+                                      ease: "linear"
+                                    }}
+                                  />
                                 </motion.div>
                               </div>
                             </div>

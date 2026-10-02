@@ -5,6 +5,7 @@ import { Briefcase, Users, Calendar, ArrowRight } from 'lucide-react'
 import { About as AboutType } from '@/sanity/types'
 import { PortableText } from '@portabletext/react'
 import { Button } from '@/components/ui/button'
+import { useState, useEffect } from 'react'
 
 interface AboutProps {
   data: AboutType | null
@@ -14,6 +15,12 @@ interface AboutProps {
 const NAV_OFFSET = 80
 
 export default function About({ data }: AboutProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   if (!data) {
     return null
   }
@@ -36,12 +43,16 @@ export default function About({ data }: AboutProps) {
   }
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 40, opacity: 0, rotateX: -10, scale: 0.95 },
     visible: {
       y: 0,
       opacity: 1,
+      rotateX: 0,
+      scale: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.6,
+        type: "spring" as const,
+        stiffness: 80,
       },
     },
   }
@@ -65,59 +76,89 @@ export default function About({ data }: AboutProps) {
   ]
 
   return (
-    <section id="about" className="py-32 bg-gradient-to-b from-slate-50 via-blue-50 to-slate-100 relative overflow-hidden">
-      {/* Enhanced Background Decoration */}
+    <section id="about" className="py-32 bg-gradient-to-b from-slate-50 via-blue-50 to-slate-100 relative overflow-hidden perspective-1000">
+      {/* 3D Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-0 right-0 w-[900px] h-[900px] bg-gradient-to-br from-blue-200/40 via-slate-200/30 to-transparent rounded-full blur-3xl"
+          className="absolute top-0 right-0 w-[900px] h-[900px] bg-gradient-to-br from-blue-400/30 via-purple-400/20 to-slate-400/10 rounded-full blur-3xl"
           animate={{
-            scale: [1, 1.2, 1],
-            x: [0, 50, 0],
-            y: [0, -30, 0],
+            scale: [1, 1.3, 1],
+            rotate: [0, 180, 360],
+            x: [0, 80, 0],
+            y: [0, -50, 0],
           }}
           transition={{
-            duration: 20,
+            duration: 25,
             repeat: Infinity,
+            ease: "easeInOut"
           }}
         />
         <motion.div
-          className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-gradient-to-tr from-slate-200/30 via-blue-200/20 to-transparent rounded-full blur-3xl"
+          className="absolute bottom-0 left-0 w-[700px] h-[700px] bg-gradient-to-tr from-purple-400/25 via-blue-400/15 to-slate-400/10 rounded-full blur-3xl"
           animate={{
-            scale: [1, 1.15, 1],
-            x: [0, -40, 0],
-            y: [0, 40, 0],
+            scale: [1, 1.2, 1],
+            rotate: [360, 180, 0],
+            x: [0, -60, 0],
+            y: [0, 50, 0],
           }}
           transition={{
-            duration: 18,
+            duration: 22,
             repeat: Infinity,
             delay: 1,
+            ease: "easeInOut"
           }}
         />
 
-        {/* Floating Geometric Shapes */}
+        {/* Floating 3D Geometric Shapes */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-20 h-20 border-2 border-slate-200/30 rounded-lg rotate-45"
+          className="absolute top-1/4 left-1/4 w-24 h-24 border-2 border-slate-300/30 rounded-lg"
           animate={{
-            rotate: [45, 90, 45],
-            scale: [1, 1.1, 1],
+            rotate: [45, 135, 225, 315, 45],
+            scale: [1, 1.2, 1],
+            y: [0, -20, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/3 right-1/4 w-20 h-20 border-2 border-blue-300/30 rounded-full"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.5, 0.3],
+            y: [0, 20, 0],
           }}
           transition={{
             duration: 10,
             repeat: Infinity,
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/3 right-1/4 w-16 h-16 border-2 border-blue-200/30 rounded-full"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
             delay: 0.5,
+            ease: "easeInOut"
           }}
         />
+        {/* Floating particles */}
+        {mounted && Array.from({ length: 10 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-blue-400/20 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -80, 0],
+              x: [0, (Math.random() - 0.5) * 40, 0],
+              opacity: [0, 0.5, 0],
+              scale: [0, 1, 0],
+            }}
+            transition={{
+              duration: 6 + Math.random() * 4,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
       </div>
       
       <div className="container mx-auto px-4 relative z-10 max-w-7xl">
@@ -153,12 +194,13 @@ export default function About({ data }: AboutProps) {
             />
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 items-start perspective-1000">
             {/* Left Column - Summary & Stats */}
             <motion.div className="space-y-10" variants={itemVariants}>
               <motion.p
                 className="text-xl text-slate-800/70 leading-relaxed font-light"
                 variants={itemVariants}
+                style={{ transform: "translateZ(20px)" }}
               >
                 {data.summary}
               </motion.p>
@@ -171,23 +213,56 @@ export default function About({ data }: AboutProps) {
                 {stats.map((stat, index) => (
                   <motion.div
                     key={index}
-                    className="group bg-gradient-to-br from-white/80 to-slate-50/60 p-6 rounded-2xl border border-slate-100/60 shadow-lg shadow-slate-200/60 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:-translate-y-2 hover:border-slate-200/80"
+                    className="group bg-gradient-to-br from-white/80 to-slate-50/60 p-6 rounded-2xl border border-slate-100/60 shadow-lg shadow-slate-200/60 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 hover:border-slate-200/80 card-3d-hover"
                     variants={itemVariants}
-                    whileHover={{ scale: 1.05, y: -8 }}
+                    style={{ transformStyle: "preserve-3d" }}
+                    animate={{
+                      y: [0, -10, 0],
+                      rotateY: [0, 5, 0],
+                      rotateX: [0, -2, 0],
+                    }}
+                    transition={{
+                      duration: 3.5 + (index % 2) * 0.4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: index * 0.15
+                    }}
+                    whileHover={{
+                      scale: 1.05,
+                      y: -15,
+                      rotateX: 8,
+                      rotateY: -8,
+                      boxShadow: "0 30px 60px -12px rgba(0, 0, 0, 0.3)"
+                    }}
                   >
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300 shadow-lg">
+                    <motion.div
+                      className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center mb-4 shadow-lg"
+                      style={{ transform: "translateZ(30px)" }}
+                      whileHover={{
+                        rotate: 360,
+                        scale: 1.2
+                      }}
+                      transition={{ duration: 0.6 }}
+                    >
                       <stat.icon className="w-6 h-6 text-white" />
-                    </div>
+                    </motion.div>
                     <motion.div
                       className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 bg-clip-text text-transparent"
+                      style={{ transform: "translateZ(20px)" }}
                       initial={{ scale: 0, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
                       viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: index * 0.1, type: "spring" as const }}
                     >
                       {stat.value}
                     </motion.div>
-                    <div className="text-slate-800/70 mt-2 font-medium group-hover:text-blue-700 transition-colors">{stat.label}</div>
+                    <motion.div
+                      className="text-slate-800/70 mt-2 font-medium group-hover:text-blue-700 transition-colors"
+                      style={{ transform: "translateZ(15px)" }}
+                      whileHover={{ x: 5 }}
+                    >
+                      {stat.label}
+                    </motion.div>
                   </motion.div>
                 ))}
               </motion.div>
@@ -195,15 +270,34 @@ export default function About({ data }: AboutProps) {
 
             {/* Right Column - Detailed Bio */}
             <motion.div
-              className="bg-gradient-to-br from-white/90 via-slate-50/40 to-blue-50/30 p-8 rounded-3xl border border-slate-100/60 shadow-2xl shadow-slate-200/60 backdrop-blur-md hover:shadow-blue-500/20 transition-all duration-500 hover:-translate-y-1"
+              className="bg-gradient-to-br from-white/90 via-slate-50/40 to-blue-50/30 p-8 rounded-3xl border border-slate-100/60 shadow-2xl shadow-slate-200/60 backdrop-blur-md hover:shadow-blue-500/20 transition-all duration-500 card-3d-hover"
               variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
+              style={{ transformStyle: "preserve-3d" }}
+              animate={{
+                y: [0, -8, 0],
+                rotateX: [0, 2, 0],
+                rotateY: [0, -2, 0],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              whileHover={{
+                scale: 1.02,
+                rotateX: 6,
+                rotateY: -6,
+                y: -12,
+                boxShadow: "0 35px 70px -12px rgba(0, 0, 0, 0.35)"
+              }}
             >
-              {data.bio && (
-                <div className="prose prose-lg text-slate-800/80 leading-relaxed">
-                  <PortableText value={data.bio} />
-                </div>
-              )}
+              <div style={{ transform: "translateZ(20px)" }}>
+                {data.bio && (
+                  <div className="prose prose-lg text-slate-800/80 leading-relaxed">
+                    <PortableText value={data.bio} />
+                  </div>
+                )}
+              </div>
             </motion.div>
           </div>
 

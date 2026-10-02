@@ -11,6 +11,7 @@ import { Suspense } from 'react'
 import Navigation from '@/components/Navigation'
 import Hero from '@/components/sections/Hero'
 import About from '@/components/sections/About'
+import SectionReveal from '@/components/SectionReveal'
 import dynamic from 'next/dynamic'
 
 // Lazy load non-critical sections for better initial load performance
@@ -47,21 +48,33 @@ export default async function Home() {
     <main className="min-h-screen">
       <Navigation />
       <Hero data={hero} />
-      <About data={about} />
+      <SectionReveal>
+        <About data={about} />
+      </SectionReveal>
       <Suspense fallback={<div className="h-96 animate-pulse bg-slate-100" />}>
-        <Skills data={skills} />
+        <SectionReveal>
+          <Skills data={skills} />
+        </SectionReveal>
       </Suspense>
       <Suspense fallback={<div className="h-96 animate-pulse bg-slate-100" />}>
-        <Experience data={experience} />
+        <SectionReveal>
+          <Experience data={experience} />
+        </SectionReveal>
       </Suspense>
       <Suspense fallback={<div className="h-96 animate-pulse bg-slate-100" />}>
-        <Portfolio data={projects} />
+        <SectionReveal>
+          <Portfolio data={projects} />
+        </SectionReveal>
       </Suspense>
       <Suspense fallback={<div className="h-96 animate-pulse bg-slate-100" />}>
-        <Services data={services} />
+        <SectionReveal>
+          <Services data={services} />
+        </SectionReveal>
       </Suspense>
       <Suspense fallback={<div className="h-96 animate-pulse bg-slate-100" />}>
-        <Contact data={null} />
+        <SectionReveal>
+          <Contact data={null} />
+        </SectionReveal>
       </Suspense>
     </main>
   )

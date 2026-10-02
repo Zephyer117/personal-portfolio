@@ -244,3 +244,266 @@ p {
 .delay-500 {
   animation-delay: 0.5s;
 }
+
+/* 3D Perspective Effects */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Enhanced 3D Floating Animations */
+@keyframes float3d {
+  0%, 100% {
+    transform: translateY(0) rotateX(0) rotateY(0);
+  }
+  25% {
+    transform: translateY(-15px) rotateX(2deg) rotateY(2deg);
+  }
+  50% {
+    transform: translateY(-10px) rotateX(0) rotateY(-2deg);
+  }
+  75% {
+    transform: translateY(-15px) rotateX(-2deg) rotateY(0);
+  }
+}
+
+@keyframes floatSubtle {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-8px) translateX(4px);
+  }
+}
+
+@keyframes floatRotate {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(5deg);
+  }
+}
+
+@keyframes floatPulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+@keyframes floatTilt {
+  0%, 100% {
+    transform: translateY(0) rotateX(0) rotateY(0);
+  }
+  25% {
+    transform: translateY(-10px) rotateX(3deg) rotateY(-3deg);
+  }
+  50% {
+    transform: translateY(-5px) rotateX(0) rotateY(0);
+  }
+  75% {
+    transform: translateY(-10px) rotateX(-3deg) rotateY(3deg);
+  }
+}
+
+.animate-float3d {
+  animation: float3d 6s ease-in-out infinite;
+}
+
+.animate-floatSubtle {
+  animation: floatSubtle 4s ease-in-out infinite;
+}
+
+.animate-floatRotate {
+  animation: floatRotate 5s ease-in-out infinite;
+}
+
+.animate-floatPulse {
+  animation: floatPulse 4s ease-in-out infinite;
+}
+
+.animate-floatTilt {
+  animation: floatTilt 5s ease-in-out infinite;
+}
+
+/* Professional Text Shadows */
+.text-shadow-3d {
+  text-shadow: 
+    0 1px 0 #ccc,
+    0 2px 0 #c9c9c9,
+    0 3px 0 #bbb,
+    0 4px 0 #b9b9b9,
+    0 5px 0 #aaa,
+    0 6px 1px rgba(0,0,0,.1),
+    0 0 5px rgba(0,0,0,.1),
+    0 1px 3px rgba(0,0,0,.3),
+    0 3px 5px rgba(0,0,0,.2),
+    0 5px 10px rgba(0,0,0,.25),
+    0 10px 10px rgba(0,0,0,.2),
+    0 20px 20px rgba(0,0,0,.15);
+}
+
+.text-shadow-glow {
+  text-shadow: 
+    0 0 10px rgba(37, 99, 235, 0.5),
+    0 0 20px rgba(37, 99, 235, 0.3),
+    0 0 30px rgba(37, 99, 235, 0.2),
+    0 0 40px rgba(37, 99, 235, 0.1);
+}
+
+.text-shadow-soft {
+  text-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.text-shadow-elevated {
+  text-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 3D Card Effects */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+  transform: perspective(1000px) rotateX(5deg) rotateY(5deg) translateZ(20px);
+}
+
+.card-3d-hover {
+  transform-style: preserve-3d;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d-hover:hover {
+  transform: perspective(1000px) rotateX(8deg) rotateY(-8deg) scale(1.05) translateZ(30px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.2),
+    0 30px 60px rgba(0, 0, 0, 0.15),
+    0 40px 80px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth Section Transitions */
+section {
+  scroll-margin-top: 80px;
+}
+
+.section-transition {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section-transition.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Enhanced Hover Effects */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 30px 60px rgba(0, 0, 0, 0.1);
+}
+
+.hover-3d-rotate {
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+}
+
+.hover-3d-rotate:hover {
+  transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) translateZ(25px);
+}
+
+/* Glassmorphism Enhancements */
+.glass-3d {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  transform-style: preserve-3d;
+}
+
+.glass-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Smooth Scroll Section Reveal */
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(60px) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+@keyframes sectionRevealSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-50px) rotateY(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotateY(0);
+  }
+}
+
+.section-reveal {
+  opacity: 0;
+  transform: translateY(60px) rotateX(10deg);
+  transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.section-reveal.visible {
+  opacity: 1;
+  transform: translateY(0) rotateX(0);
+}
+
+.section-reveal-slide {
+  opacity: 0;
+  transform: translateX(-50px) rotateY(10deg);
+  transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.section-reveal-slide.visible {
+  opacity: 1;
+  transform: translateX(0) rotateY(0);
+}
+
+/* Parallax Background Effect */
+.parallax-bg {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}

@@ -46,12 +46,16 @@ export default function Experience({ data }: ExperienceProps) {
   }
 
   const itemVariants = {
-    hidden: { x: -30, opacity: 0 },
+    hidden: { x: -50, opacity: 0, rotateY: -15, scale: 0.95 },
     visible: {
       x: 0,
       opacity: 1,
+      rotateY: 0,
+      scale: 1,
       transition: {
         duration: 0.6,
+        type: "spring" as const,
+        stiffness: 70,
       },
     },
   }
@@ -73,32 +77,64 @@ export default function Experience({ data }: ExperienceProps) {
   }
 
   return (
-    <section id="experience" className="py-32 bg-gradient-to-b from-slate-100 via-blue-50 to-slate-100 relative overflow-hidden">
-      {/* Background Decoration */}
+    <section id="experience" className="py-32 bg-gradient-to-b from-slate-100 via-blue-50 to-slate-100 relative overflow-hidden perspective-1000">
+      {/* 3D Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-200/30 via-slate-200/20 to-transparent rounded-full blur-3xl"
+          className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-gradient-to-br from-blue-400/25 via-purple-400/15 to-slate-400/10 rounded-full blur-3xl"
           animate={{
-            scale: [1, 1.2, 1],
-            x: [0, -40, 0],
-            y: [0, 30, 0],
+            scale: [1, 1.3, 1],
+            rotate: [0, 90, 0],
+            x: [0, -60, 0],
+            y: [0, 40, 0],
           }}
           transition={{
-            duration: 16,
+            duration: 18,
             repeat: Infinity,
+            ease: "easeInOut"
           }}
         />
         <motion.div
-          className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-gradient-to-tl from-slate-200/25 via-blue-200/15 to-transparent rounded-full blur-3xl"
+          className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-gradient-to-tl from-purple-400/20 via-blue-400/15 to-slate-400/10 rounded-full blur-3xl"
           animate={{
-            scale: [1, 1.15, 1],
-            x: [0, 30, 0],
-            y: [0, -25, 0],
+            scale: [1, 1.2, 1],
+            rotate: [0, -90, 0],
+            x: [0, 50, 0],
+            y: [0, -35, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            delay: 1,
+            ease: "easeInOut"
+          }}
+        />
+        {/* Floating geometric shapes */}
+        <motion.div
+          className="absolute top-1/3 left-1/5 w-16 h-16 border-2 border-blue-300/20 rounded-lg"
+          animate={{
+            rotate: [0, 45, 90, 135, 180, 0],
+            scale: [1, 1.2, 1],
+            y: [0, -15, 0],
           }}
           transition={{
             duration: 14,
             repeat: Infinity,
-            delay: 1,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/3 right-1/5 w-12 h-12 border-2 border-purple-300/20 rounded-full"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.4, 0.2],
+            y: [0, 15, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            delay: 0.5,
+            ease: "easeInOut"
           }}
         />
       </div>
@@ -171,7 +207,7 @@ export default function Experience({ data }: ExperienceProps) {
                       className="flex items-center gap-3 mb-8"
                       variants={itemVariants}
                     >
-                      <motion.div 
+                      <motion.div
                         className={`p-3 bg-gradient-to-br ${gradient} rounded-xl`}
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ duration: 0.2 }}
@@ -184,7 +220,7 @@ export default function Experience({ data }: ExperienceProps) {
                     </motion.div>
 
                     {/* Timeline Items */}
-                    <div className="relative">
+                    <div className="relative perspective-1000">
                       {/* Timeline Line */}
                       <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-blue-600" />
 
@@ -195,20 +231,42 @@ export default function Experience({ data }: ExperienceProps) {
                             key={exp._id}
                             className="relative pl-12"
                             variants={itemVariants}
+                            style={{ transformStyle: "preserve-3d" }}
+                            animate={{
+                              y: [0, -10, 0],
+                              rotateX: [0, 3, 0],
+                              rotateY: [0, -2, 0],
+                            }}
+                            transition={{
+                              duration: 4 + (index % 3) * 0.5,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                              delay: index * 0.1
+                            }}
                           >
                             {/* Timeline Dot */}
                             <motion.div
                               className={`absolute left-2 top-6 w-5 h-5 rounded-full bg-gradient-to-br ${gradient} border-4 border-white shadow-lg`}
+                              style={{ transform: "translateZ(10px)" }}
                               initial={{ scale: 0 }}
                               whileInView={{ scale: 1 }}
                               viewport={{ once: true }}
-                              transition={{ delay: index * 0.1 }}
+                              transition={{ delay: index * 0.1, type: "spring" as const }}
+                              whileHover={{ scale: 1.3 }}
                             />
 
                             {/* Card */}
                             <motion.div
-                              className="bg-gradient-to-br from-white/90 to-slate-50/60 p-6 rounded-2xl shadow-lg shadow-slate-200/60 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-slate-100/60 hover:-translate-y-1 hover:border-slate-200/80"
-                              whileHover={{ scale: 1.02, x: 5 }}
+                              className="bg-gradient-to-br from-white/90 to-slate-50/60 p-6 rounded-2xl shadow-lg shadow-slate-200/60 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-slate-100/60 hover:border-slate-200/80 card-3d-hover"
+                              style={{ transform: "translateZ(15px)" }}
+                              whileHover={{
+                                scale: 1.03,
+                                x: 10,
+                                rotateX: 8,
+                                rotateY: -8,
+                                y: -12,
+                                boxShadow: "0 35px 70px -12px rgba(0, 0, 0, 0.3)"
+                              }}
                             >
                               <div className="space-y-4">
                                 {/* Header */}
@@ -263,7 +321,7 @@ export default function Experience({ data }: ExperienceProps) {
                                       {exp.technologies.map((tech, techIndex) => (
                                         <span
                                           key={techIndex}
-                                          className="px-3 py-1 bg-gradient-to-r from-blue-500/10 to-blue-600/10 text-blue-700 rounded-full text-sm font-medium border border-blue-200/50 hover:border-blue-300 transition-colors"
+                                          className="px-3 py-1 bg-gradient-to-r from-blue-500/10 to-blue-600/10 text-blue-700 rounded-full text-sm font-medium border border-blue-200/50 hover:border-blue-300 transition-colors cursor-pointer"
                                         >
                                           {tech}
                                         </span>

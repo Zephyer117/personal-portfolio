@@ -51,12 +51,13 @@ export default function Navigation() {
     <motion.nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/95 backdrop-blur-xl border-b border-slate-200/60'
+          ? 'bg-white/95 backdrop-blur-xl border-b border-slate-200/60 shadow-lg'
           : 'bg-transparent'
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.5, type: "spring" as const }}
+      whileHover={{ y: 0 }}
     >
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between h-20">

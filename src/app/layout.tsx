@@ -79,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>{children}</body>
     </html>
